@@ -14,10 +14,11 @@ public class MatchLogic : MonoBehaviour {
     }
     private PlayState currentState;
 
-    private LoadLevel loader = new LoadLevel();
+    LoadLevel loader;
 
     void Start ()
     {
+        loader = new LoadLevel();
         SetStateAimAndPower();
         UpdateTime();
     }

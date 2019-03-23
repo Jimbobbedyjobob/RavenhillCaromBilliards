@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class GameStatCarrier {
 
     private static PlayerStats sessionStats = new PlayerStats();

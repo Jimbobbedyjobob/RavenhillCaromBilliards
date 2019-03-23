@@ -15,9 +15,9 @@ public class StartMenuFunctionality : MonoBehaviour {
     public GameObject statsPanel;
 
     // Stat Display Objects
-    public Text shotsData;
-    public Text pointsData;
-    public Text timeData;
+    public Text shotsText;
+    public Text pointsText;
+    public Text timeText;
 
     LoadLevel loader;
 
@@ -28,40 +28,17 @@ public class StartMenuFunctionality : MonoBehaviour {
 
         if (GameStatCarrier.isContinuedSession)
         {
-            DisplayLastMatchStats();
+            DisplayUtility.DisplayLastMatchStats(   statsPanel, 
+                                                    noDataWarning,
+                                                    shotsText,
+                                                    pointsText,
+                                                    timeText);
         }
         else ReadExternalLastSessionStats();
-    }
 
-    void DisplayLastMatchStats()
-    {
-        noDataWarning.enabled = false;
-        statsPanel.SetActive(true);
-        shotsData.text = GameStatCarrier.GetStats().lastSession.shots.ToString();
-        pointsData.text = GameStatCarrier.GetStats().lastSession.points.ToString();
-        float tempRawTime = GameStatCarrier.GetStats().lastSession.time;
-        timeData.text = DisplayUtility.PresentTimeValueInMInutesAndSeconds(tempRawTime);
-    }
-
-    void ReadExternalLastSessionStats()
-    {
-        DataIO.LoadLastSessionStats();
-
-        if (DataIO.lastSessionStatsExist)
-        {
-            DisplayLastMatchStats();
-        }
-        else
-        {
-            noDataWarning.enabled = true;
-            statsPanel.SetActive(false);
-        }
-    }
-
-    void Start ()
-    {
         loader = new LoadLevel();
-		volumeSlider.onValueChanged.AddListener(delegate { VolumeSliderChangeCheck(); });
+
+        volumeSlider.onValueChanged.AddListener(delegate { VolumeSliderChangeCheck(); });
     }
 	
     public void VolumeSliderChangeCheck()
@@ -74,4 +51,24 @@ public class StartMenuFunctionality : MonoBehaviour {
         GameStatCarrier.isContinuedSession = true;
         loader.LoadScene(1);
     }
+
+    void ReadExternalLastSessionStats()
+    {
+        DataIO.LoadLastSessionStats();
+
+        if (DataIO.lastSessionStatsExist)
+        {
+            DisplayUtility.DisplayLastMatchStats(statsPanel,
+                                        noDataWarning,
+                                        shotsText,
+                                        pointsText,
+                                        timeText);
+        }
+        else
+        {
+            noDataWarning.enabled = true;
+            statsPanel.SetActive(false);
+        }
+    }
+
 }

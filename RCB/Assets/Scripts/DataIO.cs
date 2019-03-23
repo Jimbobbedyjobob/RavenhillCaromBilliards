@@ -27,10 +27,12 @@ public class DataIO {
         }
     }
 
-    public static void SaveGameStats(StatTriple p_LastGameStats)
+    public static void SaveGameStats()
     {
+        StatTriple lastGameStats = GameStatCarrier.GetStats().lastSession;
+
         string filePath;
-        string statsAsJson = JsonUtility.ToJson(p_LastGameStats);
+        string statsAsJson = JsonUtility.ToJson(lastGameStats);
         filePath = Application.dataPath + gameDataPath;
         File.WriteAllText(filePath, statsAsJson);
     }
