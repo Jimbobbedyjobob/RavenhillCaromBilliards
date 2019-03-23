@@ -6,9 +6,18 @@ public class PlayerBallCollision : MonoBehaviour {
 
     public StatsCanvasFunctionality statCanvas;
 
-	void Start ()
-    {
+    // Utility Classes
+    GameStatCarrier statCarrier;
 
+    void Start ()
+    {
+        GameObject singleton = GameObject.Find("Singleton");
+
+        if (singleton != null)
+        {
+            statCarrier = singleton.GetComponent<GameStatCarrier>();
+        }
+        else Debug.LogError("PlayerBall Cannot Find Singleton Scripts!");
     }
 
     void Update ()
@@ -18,13 +27,13 @@ public class PlayerBallCollision : MonoBehaviour {
 
     void UpdateShotCount()
     {
-        GameStatCarrier.UpdateCurrentShots();
+        statCarrier.UpdateCurrentShots();
         statCanvas.UpdateShotsUI();
     }
 
     void UpdatePointCount()
     {
-        GameStatCarrier.UpdateCurrentPoints();
+        statCarrier.UpdateCurrentPoints();
         statCanvas.UpdatePointsUI();
     }
 

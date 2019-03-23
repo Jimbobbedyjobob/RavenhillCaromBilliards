@@ -19,16 +19,34 @@ public class StartMenuFunctionality : MonoBehaviour {
     public Text pointsText;
     public Text timeText;
 
+    // Utility Classes
     LoadLevel loader;
+    GameStatCarrier statCarrier;
+    DisplayUtility display;
+    DataIO readWrite;
 
     private void Awake()
+    {
+        GameObject singleton = GameObject.Find("Singleton");
+
+        if (singleton != null)
+        {
+            loader = singleton.GetComponent<LoadLevel>();
+            statCarrier = singleton.GetComponent<GameStatCarrier>();
+            display = singleton.GetComponent<DisplayUtility>();
+            readWrite = singleton.GetComponent<DataIO>();
+        }
+        else Debug.LogError("StartMenu Cannot Find Singleton Scripts!");
+    }
+
+    private void Start()
     {
         AudioListener.volume = currentVolume;
         volumeSlider.value = currentVolume;
 
-        if (GameStatCarrier.isContinuedSession)
+        if (statCarrier.isContinuedSession)
         {
-            DisplayUtility.DisplayLastMatchStats(   statsPanel, 
+            display.DisplayLastMatchStats(statsPanel,
                                                     noDataWarning,
                                                     shotsText,
                                                     pointsText,
@@ -36,11 +54,9 @@ public class StartMenuFunctionality : MonoBehaviour {
         }
         else ReadExternalLastSessionStats();
 
-        loader = new LoadLevel();
-
         volumeSlider.onValueChanged.AddListener(delegate { VolumeSliderChangeCheck(); });
     }
-	
+
     public void VolumeSliderChangeCheck()
     {
         Debug.Log(volumeSlider.value);
@@ -48,17 +64,17 @@ public class StartMenuFunctionality : MonoBehaviour {
 
     public void OnPressStart()
     {
-        GameStatCarrier.isContinuedSession = true;
-        loader.LoadScene(1);
+        statCarrier.isContinuedSession = true;
+        loader.LoadScene(2);
     }
 
     void ReadExternalLastSessionStats()
     {
-        DataIO.LoadLastSessionStats();
+        readWrite.LoadLastSessionStats();
 
-        if (DataIO.lastSessionStatsExist)
+        if (readWrite.lastSessionStatsExist)
         {
-            DisplayUtility.DisplayLastMatchStats(statsPanel,
+            display.DisplayLastMatchStats(statsPanel,
                                         noDataWarning,
                                         shotsText,
                                         pointsText,

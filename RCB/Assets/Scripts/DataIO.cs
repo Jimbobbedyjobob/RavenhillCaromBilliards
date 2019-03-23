@@ -3,12 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-public class DataIO {
+public class DataIO : MonoBehaviour {
 
-    public static bool lastSessionStatsExist = false;
-    private static string gameDataPath = "/SaveGameData/billiardsStats.json";
+    public bool lastSessionStatsExist = false;
+    private string gameDataPath = "/SaveGameData/billiardsStats.json";
 
-    public static void LoadLastSessionStats()
+    // Utility Classes
+    GameStatCarrier statCarrier;
+
+    private void Start()
+    {
+        statCarrier = GetComponent<GameStatCarrier>();
+    }
+
+    public void LoadLastSessionStats()
     {
         string filePath;
         filePath = Application.dataPath + gameDataPath;
@@ -17,7 +25,7 @@ public class DataIO {
         {
             string statsAsJson = File.ReadAllText(filePath);
             StatTriple lastSessionStats = JsonUtility.FromJson<StatTriple>(statsAsJson);
-            GameStatCarrier.InitialiseStats(lastSessionStats);
+            statCarrier.InitialiseStats(lastSessionStats);
             lastSessionStatsExist = true;
         }
         else
@@ -27,9 +35,9 @@ public class DataIO {
         }
     }
 
-    public static void SaveGameStats()
+    public void SaveGameStats()
     {
-        StatTriple lastGameStats = GameStatCarrier.GetStats().lastSession;
+        StatTriple lastGameStats = statCarrier.GetStats().lastSession;
 
         string filePath;
         string statsAsJson = JsonUtility.ToJson(lastGameStats);

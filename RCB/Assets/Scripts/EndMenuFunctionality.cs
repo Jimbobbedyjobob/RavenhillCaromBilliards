@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class EndMenuFunctionality : MonoBehaviour {
 
-    LoadLevel loader;
-
     // Text Containers
     public Text noDataWarning;
     public GameObject statsPanel;
@@ -16,18 +14,33 @@ public class EndMenuFunctionality : MonoBehaviour {
     public Text pointsText;
     public Text timeText;
 
+    // Utility Classes
+    LoadLevel loader;
+    GameStatCarrier statCarrier;
+    DisplayUtility display;
+    DataIO readWrite;
+
     private void Awake()
     {
-        loader = new LoadLevel();
+        GameObject singleton = GameObject.Find("Singleton");
+
+        if (singleton != null)
+        {
+            loader = singleton.GetComponent<LoadLevel>();
+            statCarrier = singleton.GetComponent<GameStatCarrier>();
+            display = singleton.GetComponent<DisplayUtility>();
+            readWrite = singleton.GetComponent<DataIO>();
+        }
+        else Debug.LogError("EndMenu Cannot Find Singleton Scripts!");
 
         AssignStatValuesToDisplay();
     }
 
     void AssignStatValuesToDisplay()
     {
-        if (DataIO.lastSessionStatsExist)
+        if (readWrite.lastSessionStatsExist)
         {
-            DisplayUtility.DisplayLastMatchStats(statsPanel,
+            display.DisplayLastMatchStats(statsPanel,
                                         noDataWarning,
                                         shotsText,
                                         pointsText,
@@ -45,7 +58,7 @@ public class EndMenuFunctionality : MonoBehaviour {
         noDataWarning.text += "New Game Press Registered @ End Menu";
 
         PushCurentStatsToLast();
-        loader.LoadScene(1);
+        loader.LoadScene(2);
     }
 
     public void OnPressReturnToMain()
@@ -53,12 +66,12 @@ public class EndMenuFunctionality : MonoBehaviour {
         noDataWarning.text += "Return Press Registered @ End Menu";
 
         PushCurentStatsToLast();
-        loader.LoadScene(0);
+        loader.LoadScene(1);
     }
 
     void PushCurentStatsToLast()
     {
-        GameStatCarrier.CurrentStatsToLastSessionStats();
-        DataIO.SaveGameStats();
+        statCarrier.CurrentStatsToLastSessionStats();
+        readWrite.SaveGameStats();
     }
 }

@@ -12,31 +12,48 @@ public class StatsCanvasFunctionality : MonoBehaviour {
 
     // Stat Variables
     float time = 0.0f;
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Utility Classes
+    GameStatCarrier statCarrier;
+    DisplayUtility display;
+    DataIO readWrite;
+
+    void Update ()
     {    
         if(Input.GetKeyDown("w"))
         {
-            DataIO.SaveGameStats();
+            readWrite.SaveGameStats();
         }
     }
 
     public void UpdateTime()
     {
-        time = GameStatCarrier.GetStats().currentSession.time;
-        timeText.text =  DisplayUtility.PresentTimeValueInMInutesAndSeconds(time);
+        time = statCarrier.GetStats().currentSession.time;
+        timeText.text = display.PresentTimeValueInMinutesAndSeconds(time);
     }
 
     public void UpdateShotsUI()
     {
         shotsText.text = "";
-        shotsText.text += GameStatCarrier.GetStats().currentSession.shots;
+        shotsText.text += statCarrier.GetStats().currentSession.shots;
     }
 
     public void UpdatePointsUI()
     {
         pointsText.text = "";
-        pointsText.text += GameStatCarrier.GetStats().currentSession.points;
+        pointsText.text += statCarrier.GetStats().currentSession.points;
+    }
+
+    private void Awake()
+    {
+        GameObject singleton = GameObject.Find("Singleton");
+
+        if (singleton != null)
+        {
+            statCarrier = singleton.GetComponent<GameStatCarrier>();
+            display = singleton.GetComponent<DisplayUtility>();
+            readWrite = singleton.GetComponent<DataIO>();
+        }
+        else Debug.LogError("StatsCanvas Cannot Find Singleton Scripts!");
     }
 }

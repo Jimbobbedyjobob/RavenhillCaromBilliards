@@ -2,39 +2,39 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameStatCarrier {
+public class GameStatCarrier : MonoBehaviour {
 
-    private static PlayerStats sessionStats = new PlayerStats();
-    public static PlayerStats GetStats ()
+    private PlayerStats sessionStats = new PlayerStats();
+    public PlayerStats GetStats ()
     {
         return sessionStats;
     }
 
-    public static bool isContinuedSession = false;
+    public bool isContinuedSession = false;
 
-    public static void InitialiseStats(StatTriple p_LastSessionStats)
+    public void InitialiseStats(StatTriple p_LastSessionStats)
     {
         sessionStats.lastSession = p_LastSessionStats;
     }
 
-	public static void UpdateCurrentShots ()
+	public void UpdateCurrentShots ()
     {
         sessionStats.currentSession.shots += 1;
         Debug.Log("Shot Count Updated  to " + sessionStats.currentSession.shots);
     }
 
-    public static void UpdateCurrentPoints()
+    public void UpdateCurrentPoints()
     {
         sessionStats.currentSession.points += 1;
         Debug.Log("Point Count Updated  to " + sessionStats.currentSession.points);
     }
 
-    public static void UpdateCurrentTime(float p_time)
+    public void UpdateCurrentTime(float p_time)
     {
         sessionStats.currentSession.time += p_time;
     }
 
-    public static void CurrentStatsToLastSessionStats()
+    public void CurrentStatsToLastSessionStats()
     {
         sessionStats.lastSession = sessionStats.currentSession;
         sessionStats.currentSession = new StatTriple();

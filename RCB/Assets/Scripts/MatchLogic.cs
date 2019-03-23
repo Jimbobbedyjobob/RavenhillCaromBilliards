@@ -6,6 +6,10 @@ public class MatchLogic : MonoBehaviour {
 
     public StatsCanvasFunctionality statCanvas;
 
+    // Utility Classes
+    LoadLevel loader;
+    GameStatCarrier statCarrier;
+
     private enum PlayState
     {
         AIMANDPOWER,
@@ -14,11 +18,20 @@ public class MatchLogic : MonoBehaviour {
     }
     private PlayState currentState;
 
-    LoadLevel loader;
+    private void Awake()
+    {
+        GameObject singleton = GameObject.Find("Singleton");
+
+        if (singleton != null)
+        {
+            loader = singleton.GetComponent<LoadLevel>();
+            statCarrier = singleton.GetComponent<GameStatCarrier>();
+        }
+        else Debug.Log("MatchLogic Cannot Find Singleton Scripts!");
+    }
 
     void Start ()
     {
-        loader = new LoadLevel();
         SetStateAimAndPower();
         UpdateTime();
     }
@@ -32,13 +45,13 @@ public class MatchLogic : MonoBehaviour {
     void UpdateTime()
     {
         float time = Time.timeSinceLevelLoad;
-        GameStatCarrier.UpdateCurrentTime(time);
+        statCarrier.UpdateCurrentTime(time);
         statCanvas.UpdateTime();
     }
 
     void CheckForGameOver()
     {
-        if(GameStatCarrier.GetStats().currentSession.points >= 3)
+        if(statCarrier.GetStats().currentSession.points >= 3)
         {
             SetStateGameOver();
         }
@@ -67,7 +80,7 @@ public class MatchLogic : MonoBehaviour {
     void SetStateGameOver()
     {
         currentState = PlayState.GAMEOVER;
-        loader.LoadScene(2);
+        loader.LoadScene(3);
     }
     #endregion
 }
