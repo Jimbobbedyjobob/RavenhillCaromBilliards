@@ -58,7 +58,7 @@ public class EndMenuFunctionality : MonoBehaviour {
         noDataWarning.text += "New Game Press Registered @ End Menu";
 
         PushCurentStatsToLast();
-        loader.LoadScene(2);
+        loader.LoadScene(2, noDataWarning);
     }
 
     public void OnPressReturnToMain()
@@ -66,7 +66,7 @@ public class EndMenuFunctionality : MonoBehaviour {
         noDataWarning.text += "Return Press Registered @ End Menu";
 
         PushCurentStatsToLast();
-        loader.LoadScene(1);
+        loader.LoadScene(1, noDataWarning);
     }
 
     void PushCurentStatsToLast()

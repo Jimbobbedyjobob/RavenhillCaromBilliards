@@ -65,7 +65,7 @@ public class StartMenuFunctionality : MonoBehaviour {
     public void OnPressStart()
     {
         statCarrier.isContinuedSession = true;
-        loader.LoadScene(2);
+        loader.LoadScene(2, noDataWarning);
     }
 
     void ReadExternalLastSessionStats()

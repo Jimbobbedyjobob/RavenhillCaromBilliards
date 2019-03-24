@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MatchLogic : MonoBehaviour {
 
     public StatsCanvasFunctionality statCanvas;
+    public Text tempTextRef; 
 
     // Utility Classes
     LoadLevel loader;
@@ -80,7 +82,7 @@ public class MatchLogic : MonoBehaviour {
     void SetStateGameOver()
     {
         currentState = PlayState.GAMEOVER;
-        loader.LoadScene(3);
+        loader.LoadScene(3, tempTextRef);
     }
     #endregion
 }

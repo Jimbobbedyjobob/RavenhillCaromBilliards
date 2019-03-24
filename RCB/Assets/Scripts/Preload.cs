@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Preload : MonoBehaviour {
 
@@ -8,7 +9,6 @@ public class Preload : MonoBehaviour {
 
 	void Start ()
     {
-
         loader.LoadScene(1);
     }
 }
