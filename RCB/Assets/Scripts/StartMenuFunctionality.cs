@@ -57,12 +57,6 @@ public class StartMenuFunctionality : MonoBehaviour {
             statsPanel.SetActive(false);
         }
     }
-
-    void Start ()
-    {
-        loader = new LoadLevel();
-		volumeSlider.onValueChanged.AddListener(delegate { VolumeSliderChangeCheck(); });
-    }
 	
     public void VolumeSliderChangeCheck()
     {
@@ -73,5 +67,15 @@ public class StartMenuFunctionality : MonoBehaviour {
     {
         GameStatCarrier.isContinuedSession = true;
         loader.LoadScene(1);
+    }
+
+    void Start ()
+    {
+        volumeSlider.onValueChanged.AddListener(delegate { VolumeSliderChangeCheck(); });
+
+        if (loader == null)
+        {
+            loader = new LoadLevel();
+        }
     }
 }

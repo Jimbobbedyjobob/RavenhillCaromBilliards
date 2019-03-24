@@ -33,13 +33,11 @@ public class PlayerBallCollision : MonoBehaviour {
     {
         if (Input.GetKeyDown("s"))
         {
-            Debug.Log("S Pressed");
             UpdateShotCount();
         }
 
         if (Input.GetKeyDown("p"))
         {
-            Debug.Log("P Pressed");
             UpdatePointCount();
         }
     }

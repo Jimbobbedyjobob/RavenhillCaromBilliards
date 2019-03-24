@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class GameStatCarrier {
 
     private static PlayerStats sessionStats = new PlayerStats();
@@ -21,13 +20,11 @@ public class GameStatCarrier {
 	public static void UpdateCurrentShots ()
     {
         sessionStats.currentSession.shots += 1;
-        Debug.Log("Shot Count Updated  to " + sessionStats.currentSession.shots);
     }
 
     public static void UpdateCurrentPoints()
     {
         sessionStats.currentSession.points += 1;
-        Debug.Log("Point Count Updated  to " + sessionStats.currentSession.points);
     }
 
     public static void UpdateCurrentTime(float p_time)

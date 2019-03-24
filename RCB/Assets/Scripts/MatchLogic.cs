@@ -55,16 +55,19 @@ public class MatchLogic : MonoBehaviour {
 
     void SetStateAimAndPower()
     {
+        Debug.Log("GameState = " + currentState);
         currentState = PlayState.AIMANDPOWER;
     }
 
     void SetStatePlayingOut()
     {
+        Debug.Log("GameState = " + currentState);
         currentState = PlayState.PLAYINGOUT;
     }
 
     void SetStateGameOver()
     {
+        Debug.Log("GameState = " + currentState);
         currentState = PlayState.GAMEOVER;
         loader.LoadScene(2);
     }

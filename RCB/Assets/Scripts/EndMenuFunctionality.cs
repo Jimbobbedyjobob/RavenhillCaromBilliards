@@ -2,10 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class EndMenuFunctionality : MonoBehaviour {
 
-    LoadLevel loader = new LoadLevel();
+    // Text Containers
+    public Text noDataWarning;
+    public GameObject statsPanel;
+
+    // Stat Display Objects
+    public Text shotsData;
+    public Text pointsData;
+    public Text timeData;
+
+    LoadLevel loader;
+
+    private void Update()
+    {
+        if (Input.GetKeyDown("1"))
+        {
+            OnPressReturnToMain();
+        }
+        if (Input.GetKeyDown("2"))
+        {
+            OnPressNewGame();
+        }
+    }
 
     public void OnPressNewGame()
     {
@@ -14,8 +36,36 @@ public class EndMenuFunctionality : MonoBehaviour {
 
     public void OnPressReturnToMain()
     {
-        GameStatCarrier.CurrentStatsToLastSessionStats();
-        DataIO.SaveGameStats(GameStatCarrier.GetStats().lastSession);
         loader.LoadScene(0);
     }
+
+    void PushCurrentStatsToLast()
+    {
+        GameStatCarrier.CurrentStatsToLastSessionStats();
+    }
+
+    private void Start()
+    {
+        PushCurrentStatsToLast();
+
+        //DataIO.SaveGameStats(GameStatCarrier.GetStats().lastSession);
+
+        if (loader == null)
+        {
+            loader = new LoadLevel();
+        }
+
+        DisplayLastMatchStats();
+    }
+
+    void DisplayLastMatchStats()
+    {
+        noDataWarning.enabled = false;
+        statsPanel.SetActive(true);
+        shotsData.text = GameStatCarrier.GetStats().lastSession.shots.ToString();
+        pointsData.text = GameStatCarrier.GetStats().lastSession.points.ToString();
+        float tempRawTime = GameStatCarrier.GetStats().lastSession.time;
+        timeData.text = DisplayUtility.PresentTimeValueInMInutesAndSeconds(tempRawTime);
+    }
+
 }

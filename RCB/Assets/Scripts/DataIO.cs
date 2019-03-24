@@ -11,7 +11,8 @@ public class DataIO {
     public static void LoadLastSessionStats()
     {
         string filePath;
-        filePath = Application.dataPath + gameDataPath;
+        filePath = Application.persistentDataPath + gameDataPath;
+        Debug.Log(filePath);
 
         if (File.Exists(filePath))
         {
@@ -30,6 +31,8 @@ public class DataIO {
     public static void SaveGameStats(StatTriple p_LastGameStats)
     {
         string filePath;
+        filePath = Application.persistentDataPath + gameDataPath;
+        Debug.Log(filePath);
         string statsAsJson = JsonUtility.ToJson(p_LastGameStats);
         filePath = Application.dataPath + gameDataPath;
         File.WriteAllText(filePath, statsAsJson);

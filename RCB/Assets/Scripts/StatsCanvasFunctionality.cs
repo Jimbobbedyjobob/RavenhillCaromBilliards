@@ -11,18 +11,7 @@ public class StatsCanvasFunctionality : MonoBehaviour {
     public Text timeText;
 
     // Stat Variables
-    int shots = 0;
-    int points = 0;
     float time = 0.0f;
-	
-	// Update is called once per frame
-	void Update ()
-    {    
-        if(Input.GetKeyDown("w"))
-        {
-            DataIO.SaveGameStats(GameStatCarrier.GetStats().currentSession);
-        }
-    }
 
     public void UpdateTime()
     {
