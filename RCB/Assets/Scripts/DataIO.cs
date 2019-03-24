@@ -6,7 +6,7 @@ using System.IO;
 public class DataIO {
 
     public static bool lastSessionStatsExist = false;
-    private static string gameDataPath = "/SaveGameData/billiardsStats.json";
+    private static string gameDataPath = "/billiardsStats.json";
 
     public static void LoadLastSessionStats()
     {
@@ -34,7 +34,7 @@ public class DataIO {
         filePath = Application.persistentDataPath + gameDataPath;
         Debug.Log(filePath);
         string statsAsJson = JsonUtility.ToJson(p_LastGameStats);
-        filePath = Application.dataPath + gameDataPath;
         File.WriteAllText(filePath, statsAsJson);
+
     }
 }

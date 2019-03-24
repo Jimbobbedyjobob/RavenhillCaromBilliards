@@ -48,7 +48,7 @@ public class EndMenuFunctionality : MonoBehaviour {
     {
         PushCurrentStatsToLast();
 
-        //DataIO.SaveGameStats(GameStatCarrier.GetStats().lastSession);
+        DataIO.SaveGameStats(GameStatCarrier.GetStats().lastSession);
 
         if (loader == null)
         {
