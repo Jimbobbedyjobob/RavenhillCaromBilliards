@@ -1,25 +1,51 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+
+public enum PlayState
+{
+    PLAYERINPUT,
+    SHOTRUNNING,
+    GAMEOVER
+}
+
+[System.Serializable]
+public class PlayStateEvent : UnityEvent<PlayState>
+{
+}
 
 public class MatchLogic : MonoBehaviour {
 
     public StatsCanvasFunctionality statCanvas;
+    public PlayStateEvent playStateUpdate;
 
-    private enum PlayState
-    {
-        AIMANDPOWER,
-        PLAYINGOUT,
-        GAMEOVER
-    }
     private PlayState currentState;
-
     private LoadLevel loader = new LoadLevel();
+
+    private void Awake()
+    {
+        if (playStateUpdate == null)
+        {
+            playStateUpdate = new PlayStateEvent();
+        }
+
+    }
 
     void Start ()
     {
+        if (statCanvas == null || loader == null)
+        {
+            Debug.LogError("PlayerBallCollision is missing script references!!");
+        }
+
         SetStateAimAndPower();
         UpdateTime();
+    }
+
+    private void OnEnable()
+    {
+        playStateUpdate.Invoke(currentState);
     }
 
     void Update ()
@@ -44,32 +70,27 @@ public class MatchLogic : MonoBehaviour {
     }
 
     #region Game State
-    public bool CanReceiveInput()
+    public void SetStateAimAndPower()
     {
-        if (currentState == PlayState.AIMANDPOWER)
-        {
-            return true;
-        }
-        else return false;
+        currentState = PlayState.PLAYERINPUT;
+        Debug.Log("GameState = " + currentState);
+        playStateUpdate.Invoke(currentState);
     }
 
-    void SetStateAimAndPower()
+    public void SetStatePlayingOut()
     {
+        GameStatCarrier.pointRegisteredThisShot = false;
+        currentState = PlayState.SHOTRUNNING;
         Debug.Log("GameState = " + currentState);
-        currentState = PlayState.AIMANDPOWER;
-    }
-
-    void SetStatePlayingOut()
-    {
-        Debug.Log("GameState = " + currentState);
-        currentState = PlayState.PLAYINGOUT;
+        playStateUpdate.Invoke(currentState);
     }
 
     void SetStateGameOver()
     {
-        Debug.Log("GameState = " + currentState);
         currentState = PlayState.GAMEOVER;
         loader.LoadScene(2);
+        Debug.Log("GameState = " + currentState);
+        playStateUpdate.Invoke(currentState);
     }
     #endregion
 }

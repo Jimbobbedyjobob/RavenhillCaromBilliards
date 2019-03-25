@@ -12,6 +12,8 @@ public class GameStatCarrier {
 
     public static bool isContinuedSession = false;
 
+    public static bool pointRegisteredThisShot = false;
+
     public static void InitialiseStats(StatTriple p_LastSessionStats)
     {
         sessionStats.lastSession = p_LastSessionStats;
@@ -25,6 +27,7 @@ public class GameStatCarrier {
     public static void UpdateCurrentPoints()
     {
         sessionStats.currentSession.points += 1;
+        pointRegisteredThisShot = true;
     }
 
     public static void UpdateCurrentTime(float p_time)
