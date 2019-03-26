@@ -65,7 +65,7 @@ public class EndMenuFunctionality : MonoBehaviour {
         shotsData.text = GameStatCarrier.GetStats().lastSession.shots.ToString();
         pointsData.text = GameStatCarrier.GetStats().lastSession.points.ToString();
         float tempRawTime = GameStatCarrier.GetStats().lastSession.time;
-        timeData.text = DisplayUtility.PresentTimeValueInMInutesAndSeconds(tempRawTime);
+        timeData.text = UtilityFunctions.PresentTimeValueInMInutesAndSeconds(tempRawTime);
     }
 
 }

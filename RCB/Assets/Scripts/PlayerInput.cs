@@ -9,7 +9,7 @@ public class PlayerInput : MonoBehaviour {
     public StatsCanvasFunctionality statCanvas;
     public MatchLogic matchLogic;
     [Header("Objects from elswqhere in scene")]
-    public GameObject inputCanvas;
+    public GameObject playerCanvasHost;
     public Rigidbody playerBall;
 
     private Vector3 aimDirection = new Vector3();
@@ -74,9 +74,9 @@ public class PlayerInput : MonoBehaviour {
 
     void UpdateAimDirection()
     {
-        Vector3 rotateYDegrees = new Vector3(0f, 0f, roationInput);
-        inputCanvas.transform.Rotate(rotateYDegrees, Space.Self);
-        aimDirection = - inputCanvas.transform.up;
+        Vector3 rotateYDegrees = new Vector3(0f, roationInput, 0f);
+        playerCanvasHost.transform.Rotate(rotateYDegrees, Space.Self);
+        aimDirection = playerCanvasHost.transform.forward;
     }
 
     void UpdateShotVector()
@@ -100,6 +100,7 @@ public class PlayerInput : MonoBehaviour {
         if(playerBall.velocity.magnitude <= 0.01f)
         {
             matchLogic.SetStateAimAndPower();
+            playerBall.velocity = Vector3.zero;
         }
     }
 }

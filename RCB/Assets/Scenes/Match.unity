@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 64209852}
   - component: {fileID: 64209855}
   - component: {fileID: 64209851}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ball_Yellow
   m_TagString: Ball
   m_Icon: {fileID: 0}
@@ -197,7 +197,7 @@ Transform:
   m_LocalScale: {x: 0.08, y: 0.08, z: 0.08}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &64209855
 Rigidbody:
@@ -277,7 +277,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &245853563
 GameObject:
@@ -471,7 +471,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &357440753
 GameObject:
@@ -676,7 +676,7 @@ GameObject:
   - component: {fileID: 679960649}
   - component: {fileID: 679960648}
   - component: {fileID: 679960647}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: South
   m_TagString: Pad
   m_Icon: {fileID: 0}
@@ -1043,13 +1043,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1309313217}
-  m_LocalRotation: {x: 0.5, y: -0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: -0.225, y: 3.831, z: 0}
+  m_LocalRotation: {x: -0.000000032516226, y: 0.9848078, z: -0.17364816, w: -0.0000001844087}
+  m_LocalPosition: {x: 0, y: 0.9, z: 1.2499999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 2069247335}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 90}
+  m_LocalEulerAnglesHint: {x: 20, y: 180.00002, z: 0}
 --- !u!114 &1309313222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1061,7 +1061,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7966086ddda58db4594d5964f1f6bd39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  matchLogic: {fileID: 317413704}
   playerBall: {fileID: 1817452659}
+  playerCanvasHost: {fileID: 1954487353}
+  cameraRoot: {fileID: 2069247335}
 --- !u!1 &1327621529
 GameObject:
   m_ObjectHideFlags: 0
@@ -1212,7 +1215,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1454352713}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Table
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1235,7 +1238,7 @@ Transform:
   - {fileID: 1576186866}
   - {fileID: 679960646}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1508907697
 GameObject:
@@ -1297,7 +1300,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1514050053
 GameObject:
@@ -1310,7 +1313,7 @@ GameObject:
   - component: {fileID: 1514050057}
   - component: {fileID: 1514050056}
   - component: {fileID: 1514050055}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: West
   m_TagString: Pad
   m_Icon: {fileID: 0}
@@ -1396,7 +1399,7 @@ GameObject:
   - component: {fileID: 1543105940}
   - component: {fileID: 1543105943}
   - component: {fileID: 1543105939}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ball_Red
   m_TagString: Ball
   m_Icon: {fileID: 0}
@@ -1468,7 +1471,7 @@ Transform:
   m_LocalScale: {x: 0.08, y: 0.08, z: 0.08}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &1543105943
 Rigidbody:
@@ -1496,7 +1499,7 @@ GameObject:
   - component: {fileID: 1576186869}
   - component: {fileID: 1576186868}
   - component: {fileID: 1576186867}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: North
   m_TagString: Pad
   m_Icon: {fileID: 0}
@@ -1581,7 +1584,7 @@ GameObject:
   - component: {fileID: 1659262676}
   - component: {fileID: 1659262675}
   - component: {fileID: 1659262674}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1671,7 +1674,7 @@ GameObject:
   - component: {fileID: 1817452662}
   - component: {fileID: 1817452661}
   - component: {fileID: 1817452664}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Player_Ball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1743,7 +1746,7 @@ Transform:
   m_LocalScale: {x: 0.08, y: 0.08, z: 0.08}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1817452660
 MonoBehaviour:
@@ -1775,7 +1778,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerBall: {fileID: 1817452659}
   matchLogic: {fileID: 317413704}
-  playerUI: {fileID: 1946961918}
+  playerCanvasHost: {fileID: 1954487353}
   pointerTransform: {fileID: 1327621530}
   pointerScaleMultiplier: 500
 --- !u!114 &1817452662
@@ -1792,7 +1795,7 @@ MonoBehaviour:
   playerUI: {fileID: 1817452661}
   statCanvas: {fileID: 1863367759}
   matchLogic: {fileID: 317413704}
-  inputCanvas: {fileID: 1946961914}
+  playerCanvasHost: {fileID: 1954487352}
   playerBall: {fileID: 1817452663}
   shotPowerMultiplier: 200000
 --- !u!54 &1817452663
@@ -1995,7 +1998,7 @@ RectTransform:
   - {fileID: 1964352210}
   - {fileID: 357440754}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2108,7 +2111,7 @@ GameObject:
   - component: {fileID: 1911588327}
   - component: {fileID: 1911588326}
   - component: {fileID: 1911588325}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: East
   m_TagString: Pad
   m_Icon: {fileID: 0}
@@ -2206,17 +2209,17 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1946961914}
-  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 1.1}
-  m_LocalScale: {x: 0.004, y: 0.004000002, z: 0.004000002}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: -0.7071068, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.004, y: 0.0040000076, z: 0.0040000076}
   m_Children:
   - {fileID: 1327621530}
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_Father: {fileID: 1954487353}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 90, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.04}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1946961916
@@ -2276,6 +2279,35 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1 &1954487352
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1954487353}
+  m_Layer: 0
+  m_Name: PlayerUIHost
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1954487353
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1954487352}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.04, z: 1.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1946961915}
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1957047842
 GameObject:
   m_ObjectHideFlags: 0
@@ -2520,3 +2552,32 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2028243552}
+--- !u!1 &2069247334
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 2069247335}
+  m_Layer: 0
+  m_Name: CameraRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2069247335
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2069247334}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.04, z: 1.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1309313221}
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

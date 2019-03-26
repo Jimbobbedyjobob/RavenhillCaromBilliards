@@ -12,7 +12,6 @@ public class PlayerBallCollision : MonoBehaviour
 
     private Rigidbody rb;
     private GameObject[] hits = new GameObject[2];
-    private bool isShotPlayingOut = false;
 
     void Start()
     {
@@ -26,8 +25,6 @@ public class PlayerBallCollision : MonoBehaviour
         {
             Debug.LogError("PlayerBall RigidBody is missing!!");
         }
-
-        matchLogic.playStateUpdate.AddListener(PlayStateUpdateReaction);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -43,19 +40,6 @@ public class PlayerBallCollision : MonoBehaviour
             audioSource.clip = soundFX[1];
             audioSource.Play();
             CalculateNewDirection(collision);
-        }
-    }
-
-    private void PlayStateUpdateReaction(PlayState p_UpdatedState)
-    {
-        if(p_UpdatedState == PlayState.PLAYERINPUT)
-        {
-            isShotPlayingOut = false;
-            hits = new GameObject[2];
-        }
-        if(p_UpdatedState == PlayState.SHOTRUNNING)
-        {
-            isShotPlayingOut = true;
         }
     }
 
