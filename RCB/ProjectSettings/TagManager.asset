@@ -16,8 +16,8 @@ TagManager:
   - 
   - 
   - PostProcessing
-  - 
-  - 
+  - PlayObjects
+  - CameraObjects
   - 
   - 
   - 
