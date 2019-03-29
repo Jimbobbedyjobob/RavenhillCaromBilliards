@@ -2,105 +2,128 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerInput : MonoBehaviour {
-
+public class PlayerInput : MonoBehaviour
+{
     [Header("Scripts from other scene objects")]
-    public PlayerUI playerUI;
+    public PlayerPointer playerPointer;
     public StatsCanvasFunctionality statCanvas;
-    public MatchLogic matchLogic;
-    [Header("Objects from elswqhere in scene")]
-    public GameObject playerCanvasHost;
+
+    [Header("Objects from elsewhere in scene")]
+    public GameObject cameraRoot;
     public Rigidbody playerBall;
 
     private Vector3 aimDirection = new Vector3();
     private Vector3 shotVector = new Vector3();
 
-    public  float shotPowerMultiplier = 10000f;
+    public  float shotPowerMultiplier = 15f;
+    public float maxShotPower = 100f;
 
     private float shotPower = 0.0f;
     private float roationInput;
 
     private PlayState currentPlayState;
 
-	void Start ()
+    void Start ()
     {
-        if (playerUI == null || statCanvas == null || matchLogic == null)
-        {
-            Debug.LogError("PlayerBallCollision is missing script references!!");
-        }
-
-        matchLogic.playStateUpdate.AddListener(PlayStateUpdateReaction);
+        EventHub.PlayStateUpdate.AddListener(PlayStateUpdateListener);
+        EventHub.BallOutofBoundsEvent.AddListener(BallOOBListener);
         UpdateAimDirection();
+        currentPlayState = PlayState.PLAYERINPUT;
     }
 
     private void Update()
     {
         if (currentPlayState == PlayState.PLAYERINPUT)
         {
+            playerBall.velocity = Vector3.zero;
             CheckForInput();
         }
-        else if (currentPlayState == PlayState.SHOTRUNNING)
-        {
-            CheckForBallHasStopped();
-        }
-    }
-
-    private void PlayStateUpdateReaction(PlayState p_UpdatedState)
-    {
-        currentPlayState = p_UpdatedState;
     }
 
     void CheckForInput()
     {
-        if(Input.GetAxis("Horizontal") != 0.0f)
+        if (Input.GetAxis("Horizontal") != 0.0f)
         {
             roationInput = Input.GetAxis("Horizontal");
-            UpdateAimDirection();
         }
+        UpdateAimDirection();   // Put this here to ensure there's a vector even without Input
 
-        if(Input.GetKey("space"))
+        if (Input.GetKey("space"))
         {
-            shotPower += Time.deltaTime;
-            playerUI.IncreasePowerIndicator();
+            shotPower += Time.deltaTime * shotPowerMultiplier;
+            if (shotPower <= maxShotPower)
+            {
+                playerPointer.IncreasePowerIndicator();
+            }         
         }
 
         if(Input.GetKeyUp("space"))
         {
-            
-            matchLogic.SetStatePlayingOut();
+            Debug.Log("FIIIIIIIIIIIIRE!!!!!!!");
+            GameStatCarrier.isFirstShotPlayed = true;
+            EventHub.BallReleased.Invoke();
             ReleaseBall();
         }
-    }
-
-    void UpdateAimDirection()
-    {
-        Vector3 rotateYDegrees = new Vector3(0f, roationInput, 0f);
-        playerCanvasHost.transform.Rotate(rotateYDegrees, Space.Self);
-        aimDirection = playerCanvasHost.transform.forward;
-    }
-
-    void UpdateShotVector()
-    {
-        shotVector = aimDirection;
-        shotVector *= shotPower;
     }
 
     void ReleaseBall()
     {
         UpdateShotVector();
+        // Send required shot Vectors to Replay
+        EventHub.UpdateReleaseVectorDataEvent.Invoke(UpdatedReleaseVectors(), false);
+        // Reset Items 
         shotPower = 0.0f;
+        roationInput = 0.0f;
+        playerPointer.ResetPowerIndicator();
+        // Update Statistics
         GameStatCarrier.UpdateCurrentShots();
         statCanvas.UpdateShotsUI();
-        playerUI.ResetPowerIndicator();
-        playerBall.AddForce(aimDirection, ForceMode.VelocityChange);
+        // Release the Ball
+        playerBall.AddForce(shotVector, ForceMode.VelocityChange);
     }
 
-    void CheckForBallHasStopped()
+    #region Update-Variables Functions
+    void UpdateAimDirection()
     {
-        if(playerBall.velocity.magnitude <= 0.01f)
+        Vector3 rotateYDegrees = new Vector3(0f, roationInput, 0f);
+        cameraRoot.transform.Rotate(rotateYDegrees, Space.World);
+        aimDirection = cameraRoot.transform.forward;
+        roationInput = 0.0f;
+    }
+
+    void UpdateShotVector()
+    {
+        shotVector = aimDirection.normalized;
+        if (shotPower >= maxShotPower)
         {
-            matchLogic.SetStateAimAndPower();
-            playerBall.velocity = Vector3.zero;
+            shotPower = maxShotPower;
+        }
+        shotVector *= shotPower;
+    }
+
+    private InputReleaseVectors UpdatedReleaseVectors()
+    {
+        InputReleaseVectors vectors = new InputReleaseVectors();
+        vectors.shotVector = shotVector;
+        vectors.cameraPosition = cameraRoot.transform.position;
+        return vectors;
+    }
+    #endregion
+
+    #region Listeners
+    private void PlayStateUpdateListener(PlayState p_UpdatedState)
+    {
+        currentPlayState = p_UpdatedState;
+        if(currentPlayState == PlayState.REPLAYING)
+        {
+            shotVector = new Vector3();
+            aimDirection = new Vector3();
         }
     }
+
+    private void BallOOBListener()
+    {
+        EventHub.UpdateReleaseVectorDataEvent.Invoke(UpdatedReleaseVectors(), false);
+    }
+    #endregion
 }

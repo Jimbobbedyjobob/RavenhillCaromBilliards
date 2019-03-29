@@ -1,67 +1,66 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public enum PlayState
 {
+    CAMERAAIMING,
     PLAYERINPUT,
-    SHOTRUNNING,
+    BALLRELEASED,
+    REPLAYING,
     GAMEOVER
 }
 
-[System.Serializable]
-public class PlayStateEvent : UnityEvent<PlayState>
+public class MatchLogic : MonoBehaviour
 {
-}
-
-public class MatchLogic : MonoBehaviour {
-
+    [Header("Scripts from other scene objects")]
     public StatsCanvasFunctionality statCanvas;
-    public PlayStateEvent playStateUpdate;
 
-    private PlayState currentState;
+    [Header("Objects from elsewhere in scene")]
+    public Rigidbody playerBall;
+    public Rigidbody redBall;
+    public Rigidbody yellowBall;
+    public Transform cameraRoot;
+
+    private PlayState currentState = PlayState.PLAYERINPUT;
     private LoadLevel loader = new LoadLevel();
 
     private void Awake()
     {
-        if (playStateUpdate == null)
-        {
-            playStateUpdate = new PlayStateEvent();
-        }
-
+        EventHub.InitializeEvents();
     }
 
     void Start ()
     {
-        if (statCanvas == null || loader == null)
+        EventHub.BallReleased.AddListener(SetStateBallReleased);
+        EventHub.CameraInPosition.AddListener(SetStatePlayerInput);
+        EventHub.ReplayingEvent.AddListener(SetStateReplaying);
+        EventHub.ReplayComplete.AddListener(SetStateCameraAiming);
+        EventHub.BallOutofBoundsEvent.AddListener(BallOOBReaction);
+        SetStatePlayerInput();
+    }
+
+    private void Update ()
+    {
+        UpdateTime();
+        if (currentState == PlayState.BALLRELEASED)
         {
-            Debug.LogError("PlayerBallCollision is missing script references!!");
+            if (UtilityFunctions.CheckForAllBallsStopped(playerBall, redBall, yellowBall))
+            {
+                SetStateCameraAiming();
+            }
         }
-
-        SetStateAimAndPower();
-        UpdateTime();
-    }
-
-    private void OnEnable()
-    {
-        playStateUpdate.Invoke(currentState);
-    }
-
-    void Update ()
-    {
-        UpdateTime();
         CheckForGameOver();
     }
 
-    void UpdateTime()
+    private void UpdateTime()
     {
         float time = Time.timeSinceLevelLoad;
         GameStatCarrier.UpdateCurrentTime(time);
         statCanvas.UpdateTime();
     }
 
-    void CheckForGameOver()
+    private void CheckForGameOver()
     {
         if(GameStatCarrier.GetStats().currentSession.points >= 3)
         {
@@ -69,28 +68,71 @@ public class MatchLogic : MonoBehaviour {
         }
     }
 
-    #region Game State
-    public void SetStateAimAndPower()
+    private BallPositions UpdatedBallPositions()
+    {
+        BallPositions ballPositions = new BallPositions();
+        ballPositions.PlayerBallPos = playerBall.transform.position;
+        ballPositions.RedBallPos = redBall.transform.position;
+        ballPositions.YellowBallPos = yellowBall.transform.position;
+        return ballPositions;
+    }
+
+    private InputReleaseVectors PreReplayCameraPosition()
+    {
+        InputReleaseVectors vectors = new InputReleaseVectors();
+        vectors.cameraPosition = cameraRoot.position;
+        return vectors;
+    }
+
+    #region Game States / Listeners
+    private void SetStateCameraAiming()
+    {
+        currentState = PlayState.CAMERAAIMING;
+        EventHub.PlayStateUpdate.Invoke(currentState);
+        Debug.Log("Match State is " + currentState);
+    }
+
+    private void SetStatePlayerInput()
     {
         currentState = PlayState.PLAYERINPUT;
-        Debug.Log("GameState = " + currentState);
-        playStateUpdate.Invoke(currentState);
+        EventHub.PlayStateUpdate.Invoke(currentState);
+        Debug.Log("Match State is " + currentState);
     }
 
-    public void SetStatePlayingOut()
+    private void SetStateBallReleased()
     {
         GameStatCarrier.pointRegisteredThisShot = false;
-        currentState = PlayState.SHOTRUNNING;
-        Debug.Log("GameState = " + currentState);
-        playStateUpdate.Invoke(currentState);
+        // Send Ball Position Data to ReplayFunctionality
+        EventHub.UpdateBallPositionDataEvent.Invoke(UpdatedBallPositions(), false);
+
+        currentState = PlayState.BALLRELEASED;
+        EventHub.PlayStateUpdate.Invoke(currentState);
+        Debug.Log("Match State is " + currentState);
     }
 
-    void SetStateGameOver()
+    private void SetStateReplaying()
     {
+        // Send Ball Position Data to ReplayFunctionality
+        EventHub.UpdateBallPositionDataEvent.Invoke(UpdatedBallPositions(), true);
+        EventHub.UpdateReleaseVectorDataEvent.Invoke(PreReplayCameraPosition(), true);
+
+        currentState = PlayState.REPLAYING;
+        EventHub.PlayStateUpdate.Invoke(currentState);
+        Debug.Log("Match State is " + currentState);
+    }
+
+    private void SetStateGameOver()
+    {
+        GameStatCarrier.isFirstShotPlayed = false;
         currentState = PlayState.GAMEOVER;
         loader.LoadScene(2);
-        Debug.Log("GameState = " + currentState);
-        playStateUpdate.Invoke(currentState);
+        EventHub.PlayStateUpdate.Invoke(currentState);
+        Debug.Log("Match State is " + currentState);
+    }
+
+    private void BallOOBReaction()
+    {
+        EventHub.UpdateBallPositionDataEvent.Invoke(UpdatedBallPositions(), true);
     }
     #endregion
 }

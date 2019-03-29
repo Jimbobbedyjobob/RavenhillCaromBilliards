@@ -6,20 +6,18 @@ using UnityEngine.SceneManagement;
 
 public class StartMenuFunctionality : MonoBehaviour {
 
-    // Slider Variables
+    [Header("Slider")]
     public Slider volumeSlider;
     float currentVolume = 0.5f;
-
-    // Text Containers
+    [Header("Text Containers")]
     public Text noDataWarning;
     public GameObject statsPanel;
-
-    // Stat Display Objects
+    [Header("Stat Display Texts")]
     public Text shotsData;
     public Text pointsData;
     public Text timeData;
 
-    LoadLevel loader;
+    private LoadLevel loader;
 
     private void Awake()
     {

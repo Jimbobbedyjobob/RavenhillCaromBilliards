@@ -14,6 +14,8 @@ public class GameStatCarrier {
 
     public static bool pointRegisteredThisShot = false;
 
+    public static bool isFirstShotPlayed = false;
+
     public static void InitialiseStats(StatTriple p_LastSessionStats)
     {
         sessionStats.lastSession = p_LastSessionStats;

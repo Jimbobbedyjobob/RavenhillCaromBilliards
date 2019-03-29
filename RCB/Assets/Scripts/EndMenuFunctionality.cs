@@ -4,18 +4,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class EndMenuFunctionality : MonoBehaviour {
+public class EndMenuFunctionality : MonoBehaviour
+{
 
-    // Text Containers
+    [Header("Text Containers")]
     public Text noDataWarning;
     public GameObject statsPanel;
 
-    // Stat Display Objects
+    [Header("Stat Display Texts")]
     public Text shotsData;
     public Text pointsData;
     public Text timeData;
 
-    LoadLevel loader;
+    private LoadLevel loader;
 
     private void Update()
     {

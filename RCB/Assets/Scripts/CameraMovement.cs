@@ -3,89 +3,116 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
-{
-
+{   
+    [Header("Scripts from other scene objects")]
     public MatchLogic matchLogic;
 
+    [Header("Objects from elsewhere in scene")]
     public Transform playerBall;
     public Transform playerCanvasHost;
-    public Transform cameraRoot;
+    public Transform cameraTransform;
 
-    private Quaternion toForCamRotation;
-    private Quaternion fromForCamRotation;
+    // Camnera Rotations Variables
+    private Quaternion toCamGoalRot;
+    private Quaternion fromCamRot;
     private float timeCountCamRot = 0.0f;
-    private bool initialCamRotationAchieved = false;
+    private bool isCamRotCorrect = false;
 
-    private Quaternion toForRootRotation;
-    private Quaternion fromForRootRotation;
+    // Camera Root Rotation Variables
+    private Quaternion toRootGoalRot;
+    private Quaternion fromRootRot;
     private float timeCountRootRot = 0.0f;
-    private bool initialRootRotationAchieved = false;
+    private float rootRotSpeed = 10.0f;
+    private bool isRootRotCorrect = false;
 
-    private Vector3 fromForRootPosition;
-    private float rootPositionJourneyTime = 1.5f;
-    private float rootPositionStartTime = 0.0f;
-    private bool initialRootPositionAchieved = false;
+    // Camera Root Position Variables
+    private Vector3 toRootGoalPos;
+    private Vector3 fromRootPos;
+    private float rootPosJourneyTime = 1.5f;
+    private float rootPosStartTime = 0.0f;
+    private bool isRootPosCorrect = false;
 
     private PlayState currentPlayState;
 
-    void Start()
+    private void Start()
     {
-        if (playerBall == null)
-        {
-            Debug.LogError("Camera cannot find Ball!!");
-        }
-
-        toForCamRotation = transform.rotation;
-        matchLogic.playStateUpdate.AddListener(PlayStateUpdateReaction);
+        toCamGoalRot = cameraTransform.rotation;
+        EventHub.PlayStateUpdate.AddListener(PlayStateUpdateListener);
+        EventHub.CameraInPosition.Invoke();
     }
 
     void Update()
     {
-        if (currentPlayState == PlayState.SHOTRUNNING)
+        if (currentPlayState == PlayState.CAMERAAIMING)
+        {
+            // Change to goal values
+            
+            // Cam Root Rotation
+            if (!isRootRotCorrect)
+            {
+                transform.rotation = toRootGoalRot;
+                isRootRotCorrect = true;
+            }
+
+            // Camera Position
+            CheckBallPosition(); // Just to make sure we're heading to the current ball pos
+            if (!isRootPosCorrect)
+            {
+                isRootPosCorrect = UtilityFunctions.PosSlerpWorld(  transform, fromRootPos, toRootGoalPos, rootPosJourneyTime,  rootPosStartTime);
+            }
+
+            if (isRootRotCorrect && isRootPosCorrect)
+            {
+                EventHub.CameraInPosition.Invoke();
+            }
+        } 
+
+        if (currentPlayState == PlayState.BALLRELEASED || currentPlayState == PlayState.REPLAYING)
         {
             transform.LookAt(playerBall, Vector3.up);
         }
-        if (currentPlayState == PlayState.PLAYERINPUT)
+
+    }
+
+    private void CalculateInitialAimDireciont()
+    {
+        float yOffset = 0.04f;
+        Vector3 yOffsetCenter = new Vector3(0f, yOffset, 0f);
+        Vector3 directionToCenter = yOffsetCenter - playerBall.position;
+        toRootGoalRot = Quaternion.LookRotation(directionToCenter, Vector3.up);
+    }
+
+    private void CheckBallPosition()
+    {
+        toRootGoalPos = playerBall.position;
+        if( transform.position != toRootGoalPos)
         {
-            // Slerp to goal values
-            // Returns bool ready for the next frame
-            if(!initialCamRotationAchieved)
-            {
-                initialCamRotationAchieved = UtilityFunctions.QuaternionSlerpLocal(transform, fromForCamRotation, toForCamRotation, timeCountCamRot);
-                if (!initialCamRotationAchieved) Debug.Log("Slerp To CAM ROT ACHIEVED!!");
-            }
-
-            if (!initialRootRotationAchieved)
-            {
-                initialRootRotationAchieved = UtilityFunctions.QuaternionSlerpWorld(cameraRoot, fromForRootRotation, playerCanvasHost.rotation, timeCountRootRot);
-                if (initialRootRotationAchieved) Debug.Log("Slerp To ROOT ROT ACHIEVED!!");
-            }
-
-            if (!initialRootPositionAchieved)
-            {
-                initialRootPositionAchieved = UtilityFunctions.Vector3SlerpWorld(cameraRoot, fromForRootPosition, playerBall.position, rootPositionJourneyTime, rootPositionStartTime);
-                if (initialRootPositionAchieved) Debug.Log("Slerp To ROOT POS ACHIEVED!!");
-            }
+            isRootPosCorrect = false;
         }
     }
 
-    private void PlayStateUpdateReaction(PlayState p_UpdatedState)
+    // Listener
+    private void PlayStateUpdateListener(PlayState p_UpdatedState)
     {
         currentPlayState = p_UpdatedState;
-        if (currentPlayState == PlayState.PLAYERINPUT)
+        if (currentPlayState == PlayState.CAMERAAIMING)
         {
-            // Reset all Slerp time counters
-            // Set all Slerp 'from' values
+            // Reset all Slerp Variables
+            // Camera Rotation
             timeCountCamRot = 0.0f;
+            fromCamRot = cameraTransform.localRotation;
+            // Camera Root Rotation
             timeCountRootRot = 0.0f;
-            rootPositionStartTime = Time.time;
-            fromForCamRotation = transform.localRotation;
-            fromForRootRotation = cameraRoot.rotation;
-            fromForRootPosition = cameraRoot.position;
-            initialCamRotationAchieved = false;
-            initialRootRotationAchieved = false;
-            initialRootPositionAchieved = false;
-            Debug.Log("Slerp To Aim @ CAM REQUIRED!!");
+            fromRootRot = transform.rotation;
+            CalculateInitialAimDireciont();
+            // Camera Root Position
+            rootPosStartTime = Time.time;
+            CheckBallPosition();
+            fromRootPos = transform.position;
+            // Confirmation Bools
+            isCamRotCorrect = false;
+            isRootRotCorrect = false;
+            isRootPosCorrect = false;
         }
     }
 }

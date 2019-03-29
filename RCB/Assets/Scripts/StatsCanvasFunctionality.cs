@@ -5,13 +5,13 @@ using UnityEngine.UI;
 
 public class StatsCanvasFunctionality : MonoBehaviour {
 
-    // UI Objects
+    [Header("Stat Display Texts")]
     public Text shotsText;
     public Text pointsText;
     public Text timeText;
 
     // Stat Variables
-    float time = 0.0f;
+    private float time = 0.0f;
 
     public void UpdateTime()
     {

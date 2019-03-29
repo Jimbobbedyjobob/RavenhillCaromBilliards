@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class PlayerBallCollision : MonoBehaviour
 {
-
+    [Header("Scripts from other scene objects")]
     public StatsCanvasFunctionality statCanvas;
-    public MatchLogic matchLogic;
+
+    [Header("AudioClip Array")]
     public AudioSource audioSource;
     public AudioClip[] soundFX = new AudioClip[2];
 
@@ -15,25 +16,21 @@ public class PlayerBallCollision : MonoBehaviour
 
     void Start()
     {
-        if (statCanvas == null || matchLogic == null)
-        {
-            Debug.LogError("PlayerBallCollision is missing script references!!");
-        }
-
         rb = GetComponent<Rigidbody>();
-        if (rb == null)
-        {
-            Debug.LogError("PlayerBall RigidBody is missing!!");
-        }
+        EventHub.PlayStateUpdate.AddListener(PlayStateUpdateListener);
     }
 
+    #region Ball Collision
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Ball")
         {
             audioSource.clip = soundFX[0];
             audioSource.Play();
-            UpdateBallContactsArray(collision);
+            if(!GameStatCarrier.pointRegisteredThisShot)
+            {
+                UpdateBallContactsArray(collision);
+            }
         }
         else if (collision.gameObject.tag == "Pad")
         {
@@ -43,11 +40,8 @@ public class PlayerBallCollision : MonoBehaviour
         }
     }
 
-    #region Ball Collision
     void UpdateBallContactsArray(Collision p_Collision)
     {
-        Debug.Log("Looping through Hits Array");
-
         if (hits[0] == null && hits[1] == null)
         {
             hits[0] = p_Collision.gameObject;
@@ -61,21 +55,6 @@ public class PlayerBallCollision : MonoBehaviour
             hits[1] = p_Collision.gameObject;
         }
 
-        string zeroName;
-        string oneName;
-        if (hits[0] != null)
-        {
-            zeroName = hits[0].name;
-        }
-        else zeroName = "No 1st Hit GO";
-        if (hits[1] != null)
-        {
-            oneName = hits[1].name;
-        }
-        else oneName = "No 2nd Hit GO";
-
-        Debug.Log("Hit Aray Objs; " + zeroName + ": " + oneName);
-
         if (hits[0] != null && hits[1] != null)
         {
             AssessHaveHitAllBalls();
@@ -84,13 +63,15 @@ public class PlayerBallCollision : MonoBehaviour
 
     void AssessHaveHitAllBalls()
     {
-        Debug.Log("AssessHaveHitAllBalls Called!!");
         if (hits[0].name != hits[1].name && !GameStatCarrier.pointRegisteredThisShot)
         {
             UpdatePointCount();
+            hits = new GameObject[2];
         }
     }
 
+    // Wasn't getting a nice Ricochet with the basic physics from the Cushions, 
+    // so I added this...
     void CalculateNewDirection(Collision p_Collision)
     {
         Vector3 ricochetDirection = new Vector3();
@@ -110,7 +91,7 @@ public class PlayerBallCollision : MonoBehaviour
     }
     #endregion
 
-    #region Stat Updates
+    #region Game Statistics Updates
     void UpdateShotCount()
     {
         GameStatCarrier.UpdateCurrentShots();
@@ -123,4 +104,13 @@ public class PlayerBallCollision : MonoBehaviour
         statCanvas.UpdatePointsUI();
     }
     #endregion
+
+    // Listener
+    private void PlayStateUpdateListener(PlayState p_UpdatedState)
+    {
+        if(p_UpdatedState == PlayState.CAMERAAIMING)
+        {
+            hits = new GameObject[2];
+        }
+    }
 }
