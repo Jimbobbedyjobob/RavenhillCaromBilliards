@@ -36,7 +36,7 @@ public class MatchLogic : MonoBehaviour
         EventHub.CameraInPosition.AddListener(SetStatePlayerInput);
         EventHub.ReplayingEvent.AddListener(SetStateReplaying);
         EventHub.ReplayComplete.AddListener(SetStateCameraAiming);
-        EventHub.BallOutofBoundsEvent.AddListener(BallOOBReaction);
+        //EventHub.BallOutofBoundsEvent.AddListener(BallOOBReaction);
         SetStatePlayerInput();
     }
 
@@ -89,14 +89,12 @@ public class MatchLogic : MonoBehaviour
     {
         currentState = PlayState.CAMERAAIMING;
         EventHub.PlayStateUpdate.Invoke(currentState);
-        Debug.Log("Match State is " + currentState);
     }
 
     private void SetStatePlayerInput()
     {
         currentState = PlayState.PLAYERINPUT;
         EventHub.PlayStateUpdate.Invoke(currentState);
-        Debug.Log("Match State is " + currentState);
     }
 
     private void SetStateBallReleased()
@@ -107,7 +105,6 @@ public class MatchLogic : MonoBehaviour
 
         currentState = PlayState.BALLRELEASED;
         EventHub.PlayStateUpdate.Invoke(currentState);
-        Debug.Log("Match State is " + currentState);
     }
 
     private void SetStateReplaying()
@@ -118,7 +115,6 @@ public class MatchLogic : MonoBehaviour
 
         currentState = PlayState.REPLAYING;
         EventHub.PlayStateUpdate.Invoke(currentState);
-        Debug.Log("Match State is " + currentState);
     }
 
     private void SetStateGameOver()
@@ -127,12 +123,11 @@ public class MatchLogic : MonoBehaviour
         currentState = PlayState.GAMEOVER;
         loader.LoadScene(2);
         EventHub.PlayStateUpdate.Invoke(currentState);
-        Debug.Log("Match State is " + currentState);
     }
 
-    private void BallOOBReaction()
-    {
-        EventHub.UpdateBallPositionDataEvent.Invoke(UpdatedBallPositions(), true);
-    }
+    //private void BallOOBReaction()
+    //{
+    //    EventHub.UpdateBallPositionDataEvent.Invoke(UpdatedBallPositions(), true);
+    //}
     #endregion
 }

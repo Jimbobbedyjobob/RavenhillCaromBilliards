@@ -8,6 +8,14 @@ public class RedBallCollision : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip[] soundFX = new AudioClip[2];
 
+    private Rigidbody rb;
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Ball" && collision.gameObject.name == "Ball_Yellow")
@@ -19,6 +27,7 @@ public class RedBallCollision : MonoBehaviour
         {
             audioSource.clip = soundFX[1];
             audioSource.Play();
+            UtilityFunctions.RichocetRigidbody(rb, collision);
         }
     }
 }

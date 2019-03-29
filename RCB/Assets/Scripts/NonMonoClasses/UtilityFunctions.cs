@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public struct RicochetVectors
+{
+    public Vector3 ricochetDirection;
+    public Vector3 ricochetVelocity;
+}
+
 public class UtilityFunctions {
 
-    public static string PresentTimeValueInMInutesAndSeconds(float p_RawTimeValue)
+    public static string PresentTimeValueInMinutesAndSeconds(float p_RawTimeValue)
     {
-        // Clean Up Minnutes and Seconds values
         float totalSeconds = p_RawTimeValue;
         // remove any elapsed hours
         totalSeconds %= 3600.0f;
@@ -37,7 +42,6 @@ public class UtilityFunctions {
     {
         if (p_SlerpObject.position != p_ToPosition)
         {
-            //Vector3 midpoint = (p_FromPosition + p_ToPosition) * 0.5f;
             Vector3 midpoint = new Vector3(0f, 0.04f, 0f);
 
             Vector3 startRelativeToCenter = p_FromPosition - midpoint;
@@ -69,5 +73,25 @@ public class UtilityFunctions {
             return true;
         }
         else return false;
+    }
+
+    // Wasn't getting a lot of Ricochet with the basic physics from the Cushions, 
+    // so I added this...
+    public static void RichocetRigidbody(Rigidbody p_RB,  Collision p_Collision)
+    {
+        Vector3 ricochetDirection = new Vector3();
+
+        if (p_Collision.gameObject.name == "North")
+        { ricochetDirection = Vector3.Reflect(p_RB.velocity, -Vector3.forward); }
+        else if (p_Collision.gameObject.name == "South")
+        { ricochetDirection = Vector3.Reflect(p_RB.velocity, Vector3.forward); }
+        else if (p_Collision.gameObject.name == "East")
+        { ricochetDirection = Vector3.Reflect(p_RB.velocity, -Vector3.right); }
+        else if (p_Collision.gameObject.name == "West")
+        { ricochetDirection = Vector3.Reflect(p_RB.velocity, Vector3.right); }
+
+        float magnitude = p_RB.velocity.magnitude;
+        p_RB.velocity = ricochetDirection;
+        p_RB.velocity *= magnitude;
     }
 }

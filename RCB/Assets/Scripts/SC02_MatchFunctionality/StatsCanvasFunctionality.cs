@@ -16,7 +16,7 @@ public class StatsCanvasFunctionality : MonoBehaviour {
     public void UpdateTime()
     {
         time = GameStatCarrier.GetStats().currentSession.time;
-        timeText.text =  UtilityFunctions.PresentTimeValueInMInutesAndSeconds(time);
+        timeText.text =  UtilityFunctions.PresentTimeValueInMinutesAndSeconds(time);
     }
 
     public void UpdateShotsUI()

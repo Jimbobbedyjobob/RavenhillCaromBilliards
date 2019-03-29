@@ -51,7 +51,7 @@ public class ReplayFunctionality : MonoBehaviour
         EventHub.PlayStateUpdate.AddListener(PlayStateUpdateListener);
         EventHub.UpdateReleaseVectorDataEvent.AddListener(RecieveInputReleaseDataListener);
         EventHub.UpdateBallPositionDataEvent.AddListener(RecvievePositionReleaseDataListener);
-        EventHub.BallOutofBoundsEvent.AddListener(ResetToLastShotPositions);
+        EventHub.BallOutofBoundsEvent.AddListener(ResetOnOutOfBoundsEvent);
     }
 
     private void Update()
@@ -92,8 +92,7 @@ public class ReplayFunctionality : MonoBehaviour
         }
     }
 
-    // Used when a ball goes OutOfBounds
-    public void ResetToLastShotPositions()
+    public void ResetOnOutOfBoundsEvent()
     {
         Debug.Log("OOB Reset Called");
         SetPositions(lastShotData);
@@ -102,7 +101,6 @@ public class ReplayFunctionality : MonoBehaviour
         EventHub.ReplayComplete.Invoke();
     }
 
-    // Used after a Replay has occured
     private void ResetToPreReplayPositions()
     {
         Debug.Log("Replay Reset Called");
@@ -111,7 +109,6 @@ public class ReplayFunctionality : MonoBehaviour
         HideReplayMessages();
     }
 
-    // used when PlayState ISN'T Replay
     private void HideReplayMessages()
     {
         replayPanel.SetActive(false);

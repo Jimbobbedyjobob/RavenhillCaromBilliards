@@ -36,7 +36,7 @@ public class PlayerBallCollision : MonoBehaviour
         {
             audioSource.clip = soundFX[1];
             audioSource.Play();
-            CalculateNewDirection(collision);
+            UtilityFunctions.RichocetRigidbody(rb, collision);
         }
     }
 
@@ -45,10 +45,6 @@ public class PlayerBallCollision : MonoBehaviour
         if (hits[0] == null && hits[1] == null)
         {
             hits[0] = p_Collision.gameObject;
-        }
-        else if (hits[0].name == p_Collision.gameObject.name && hits[1] == null)
-        {
-            // Do Nothing
         }
         else if (hits[0].name != p_Collision.gameObject.name && hits[1] == null)
         {
@@ -68,26 +64,6 @@ public class PlayerBallCollision : MonoBehaviour
             UpdatePointCount();
             hits = new GameObject[2];
         }
-    }
-
-    // Wasn't getting a nice Ricochet with the basic physics from the Cushions, 
-    // so I added this...
-    void CalculateNewDirection(Collision p_Collision)
-    {
-        Vector3 ricochetDirection = new Vector3();
-
-        if (p_Collision.gameObject.name == "North")
-        { ricochetDirection = Vector3.Reflect(rb.velocity, -Vector3.forward); }
-        else if (p_Collision.gameObject.name == "South")
-        { ricochetDirection = Vector3.Reflect(rb.velocity, Vector3.forward); }
-        else if (p_Collision.gameObject.name == "East")
-        { ricochetDirection = Vector3.Reflect(rb.velocity, -Vector3.right); }
-        else if (p_Collision.gameObject.name == "West")
-        { ricochetDirection = Vector3.Reflect(rb.velocity, Vector3.right); }
-
-        float magnitude = rb.velocity.magnitude;
-        rb.velocity = ricochetDirection;
-        rb.velocity *= magnitude;
     }
     #endregion
 

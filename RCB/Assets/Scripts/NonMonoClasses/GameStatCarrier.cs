@@ -16,9 +16,12 @@ public class GameStatCarrier {
 
     public static bool isFirstShotPlayed = false;
 
+    public static float volume = 0.5f;
+
     public static void InitialiseStats(StatTriple p_LastSessionStats)
     {
         sessionStats.lastSession = p_LastSessionStats;
+        sessionStats.currentSession = new StatTriple();
     }
 
 	public static void UpdateCurrentShots ()
@@ -34,7 +37,7 @@ public class GameStatCarrier {
 
     public static void UpdateCurrentTime(float p_time)
     {
-        sessionStats.currentSession.time += p_time;
+        sessionStats.currentSession.time = p_time;
     }
 
     public static void CurrentStatsToLastSessionStats()

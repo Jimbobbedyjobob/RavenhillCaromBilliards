@@ -987,8 +987,8 @@ MonoBehaviour:
   noDataWarning: {fileID: 449983715}
   statsPanel: {fileID: 248412233}
   shotsData: {fileID: 639451354}
-  timeData: {fileID: 1283108305}
   pointsData: {fileID: 1057184869}
+  timeData: {fileID: 1283108305}
 --- !u!114 &1057184869 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114409779981169780, guid: 2c4aabe2919b3bd4bbc89c4f2cc3fced,
@@ -1147,8 +1147,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: 
+      - m_Target: {fileID: 819614114}
+        m_MethodName: VolumeSliderChange
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

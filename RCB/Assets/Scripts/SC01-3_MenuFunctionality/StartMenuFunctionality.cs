@@ -1,14 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class StartMenuFunctionality : MonoBehaviour {
 
     [Header("Slider")]
     public Slider volumeSlider;
-    float currentVolume = 0.5f;
     [Header("Text Containers")]
     public Text noDataWarning;
     public GameObject statsPanel;
@@ -21,14 +17,28 @@ public class StartMenuFunctionality : MonoBehaviour {
 
     private void Awake()
     {
-        AudioListener.volume = currentVolume;
-        volumeSlider.value = currentVolume;
+        AudioListener.volume = GameStatCarrier.volume;
+        volumeSlider.value = GameStatCarrier.volume;
 
         if (GameStatCarrier.isContinuedSession)
         {
             DisplayLastMatchStats();
         }
         else ReadExternalLastSessionStats();
+    }
+
+    void Start()
+    {
+        if (loader == null)
+        {
+            loader = new LoadLevel();
+        }
+    }
+
+    public void OnPressStart()
+    {
+        GameStatCarrier.isContinuedSession = true;
+        loader.LoadScene(1);
     }
 
     void DisplayLastMatchStats()
@@ -38,7 +48,7 @@ public class StartMenuFunctionality : MonoBehaviour {
         shotsData.text = GameStatCarrier.GetStats().lastSession.shots.ToString();
         pointsData.text = GameStatCarrier.GetStats().lastSession.points.ToString();
         float tempRawTime = GameStatCarrier.GetStats().lastSession.time;
-        timeData.text = UtilityFunctions.PresentTimeValueInMInutesAndSeconds(tempRawTime);
+        timeData.text = UtilityFunctions.PresentTimeValueInMinutesAndSeconds(tempRawTime);
     }
 
     void ReadExternalLastSessionStats()
@@ -56,24 +66,9 @@ public class StartMenuFunctionality : MonoBehaviour {
         }
     }
 	
-    public void VolumeSliderChangeCheck()
+    public void VolumeSliderChange()
     {
-        Debug.Log(volumeSlider.value);
-    }
-
-    public void OnPressStart()
-    {
-        GameStatCarrier.isContinuedSession = true;
-        loader.LoadScene(1);
-    }
-
-    void Start ()
-    {
-        volumeSlider.onValueChanged.AddListener(delegate { VolumeSliderChangeCheck(); });
-
-        if (loader == null)
-        {
-            loader = new LoadLevel();
-        }
+        GameStatCarrier.volume = volumeSlider.value;
+        AudioListener.volume = GameStatCarrier.volume;
     }
 }

@@ -12,17 +12,8 @@ public class CameraMovement : MonoBehaviour
     public Transform playerCanvasHost;
     public Transform cameraTransform;
 
-    // Camnera Rotations Variables
-    private Quaternion toCamGoalRot;
-    private Quaternion fromCamRot;
-    private float timeCountCamRot = 0.0f;
-    private bool isCamRotCorrect = false;
-
     // Camera Root Rotation Variables
     private Quaternion toRootGoalRot;
-    private Quaternion fromRootRot;
-    private float timeCountRootRot = 0.0f;
-    private float rootRotSpeed = 10.0f;
     private bool isRootRotCorrect = false;
 
     // Camera Root Position Variables
@@ -36,7 +27,6 @@ public class CameraMovement : MonoBehaviour
 
     private void Start()
     {
-        toCamGoalRot = cameraTransform.rotation;
         EventHub.PlayStateUpdate.AddListener(PlayStateUpdateListener);
         EventHub.CameraInPosition.Invoke();
     }
@@ -45,17 +35,14 @@ public class CameraMovement : MonoBehaviour
     {
         if (currentPlayState == PlayState.CAMERAAIMING)
         {
-            // Change to goal values
-            
-            // Cam Root Rotation
             if (!isRootRotCorrect)
             {
                 transform.rotation = toRootGoalRot;
                 isRootRotCorrect = true;
             }
 
-            // Camera Position
-            CheckBallPosition(); // Just to make sure we're heading to the current ball pos
+            CheckBallPosition();
+
             if (!isRootPosCorrect)
             {
                 isRootPosCorrect = UtilityFunctions.PosSlerpWorld(  transform, fromRootPos, toRootGoalPos, rootPosJourneyTime,  rootPosStartTime);
@@ -71,10 +58,9 @@ public class CameraMovement : MonoBehaviour
         {
             transform.LookAt(playerBall, Vector3.up);
         }
-
     }
 
-    private void CalculateInitialAimDireciont()
+    private void CalculateInitialAimDirecion()
     {
         float yOffset = 0.04f;
         Vector3 yOffsetCenter = new Vector3(0f, yOffset, 0f);
@@ -91,26 +77,16 @@ public class CameraMovement : MonoBehaviour
         }
     }
 
-    // Listener
     private void PlayStateUpdateListener(PlayState p_UpdatedState)
     {
         currentPlayState = p_UpdatedState;
         if (currentPlayState == PlayState.CAMERAAIMING)
         {
             // Reset all Slerp Variables
-            // Camera Rotation
-            timeCountCamRot = 0.0f;
-            fromCamRot = cameraTransform.localRotation;
-            // Camera Root Rotation
-            timeCountRootRot = 0.0f;
-            fromRootRot = transform.rotation;
-            CalculateInitialAimDireciont();
-            // Camera Root Position
+            CalculateInitialAimDirecion();
             rootPosStartTime = Time.time;
             CheckBallPosition();
             fromRootPos = transform.position;
-            // Confirmation Bools
-            isCamRotCorrect = false;
             isRootRotCorrect = false;
             isRootPosCorrect = false;
         }

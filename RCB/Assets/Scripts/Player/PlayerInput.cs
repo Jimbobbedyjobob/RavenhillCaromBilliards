@@ -26,7 +26,6 @@ public class PlayerInput : MonoBehaviour
     void Start ()
     {
         EventHub.PlayStateUpdate.AddListener(PlayStateUpdateListener);
-        EventHub.BallOutofBoundsEvent.AddListener(BallOOBListener);
         UpdateAimDirection();
         currentPlayState = PlayState.PLAYERINPUT;
     }
@@ -46,7 +45,8 @@ public class PlayerInput : MonoBehaviour
         {
             roationInput = Input.GetAxis("Horizontal");
         }
-        UpdateAimDirection();   // Put this here to ensure there's a vector even without Input
+
+        UpdateAimDirection();   
 
         if (Input.GetKey("space"))
         {
@@ -59,7 +59,6 @@ public class PlayerInput : MonoBehaviour
 
         if(Input.GetKeyUp("space"))
         {
-            Debug.Log("FIIIIIIIIIIIIRE!!!!!!!");
             GameStatCarrier.isFirstShotPlayed = true;
             EventHub.BallReleased.Invoke();
             ReleaseBall();
@@ -69,16 +68,15 @@ public class PlayerInput : MonoBehaviour
     void ReleaseBall()
     {
         UpdateShotVector();
-        // Send required shot Vectors to Replay
         EventHub.UpdateReleaseVectorDataEvent.Invoke(UpdatedReleaseVectors(), false);
-        // Reset Items 
+
         shotPower = 0.0f;
         roationInput = 0.0f;
         playerPointer.ResetPowerIndicator();
-        // Update Statistics
+
         GameStatCarrier.UpdateCurrentShots();
         statCanvas.UpdateShotsUI();
-        // Release the Ball
+
         playerBall.AddForce(shotVector, ForceMode.VelocityChange);
     }
 
@@ -110,7 +108,6 @@ public class PlayerInput : MonoBehaviour
     }
     #endregion
 
-    #region Listeners
     private void PlayStateUpdateListener(PlayState p_UpdatedState)
     {
         currentPlayState = p_UpdatedState;
@@ -120,10 +117,4 @@ public class PlayerInput : MonoBehaviour
             aimDirection = new Vector3();
         }
     }
-
-    private void BallOOBListener()
-    {
-        EventHub.UpdateReleaseVectorDataEvent.Invoke(UpdatedReleaseVectors(), false);
-    }
-    #endregion
 }

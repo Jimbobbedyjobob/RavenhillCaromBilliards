@@ -1903,6 +1903,7 @@ GameObject:
   - component: {fileID: 1817452656}
   - component: {fileID: 1817452660}
   - component: {fileID: 1817452662}
+  - component: {fileID: 1817452661}
   - component: {fileID: 1817452664}
   m_Layer: 9
   m_Name: Player_Ball
@@ -1994,6 +1995,18 @@ MonoBehaviour:
   soundFX:
   - {fileID: 8300000, guid: 0f8a8bfa72d929e49a1ed64d5f86cb72, type: 3}
   - {fileID: 8300000, guid: 4c32e9b67d3eaa84fb193ee54b7e9dcd, type: 3}
+--- !u!114 &1817452661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1817452655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2bc4e4b2ed0cc74aa029840a8601daf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statCanvas: {fileID: 1863367759}
 --- !u!114 &1817452662
 MonoBehaviour:
   m_ObjectHideFlags: 0
